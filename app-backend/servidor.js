@@ -67,3 +67,7 @@ rutasAPI.route("/").get(function (reqPeticionHttp, resRespuestaHttp) {
 });
 
 console.log(" 1.2) - El script principal ha terminado ");
+
+rutasAPI.route("/:id").delete(function(req,res) {
+    Usuario.findById(req.params.id).remove().exec();
+});

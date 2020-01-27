@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 class ListarUsuarios extends /*React.*/ Component{
 
+    constructor(props){
+        super(props);
+        this.deletePost = this.deletePost.bind(this);
+    }
+
     // Equivalente al ngOnInit(): El componente ha sido montado
     componentDidMount() {
         this.setState(null);  // Aunque es redundante
@@ -21,6 +26,19 @@ class ListarUsuarios extends /*React.*/ Component{
     }
     componentWillUnmount () { 
         // Esto se ejecuta cuando se desmonte el componente
+    }
+    deletePost(ev) {
+        let el = ev.target
+        let id = el.dataset.idusu
+        console.log(id);
+
+        fetch(`http://127.0.0.1:4000/api/usuarios/${id}`, {
+            method: 'DELETE',
+            mode: 'cors'
+        })
+         .catch(err => console.error(err))
+         .then((res) => res)
+         window.location.reload();
     }
 
     render() {
@@ -45,6 +63,7 @@ class ListarUsuarios extends /*React.*/ Component{
                             <tr>
                                 <th>Nombre</th>
                                 <th>Email</th>
+                                <th>Edad</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,7 +73,8 @@ class ListarUsuarios extends /*React.*/ Component{
                                           <tr  key={ usu._id }>
                                             <td>{ usu.nombre }</td>
                                             <td>{ usu.email }</td>
-                                            <td> <input type='button' value='Eliminar'/></td>
+                                            <td>{ usu.edad }</td>
+                                            <td> <button type="submit" data-idusu={usu._id} onClick={this.deletePost}>Eliminar</button></td>
                                             <td> <input type='button' value='Modificar'/></td>
                                           </tr> 
                                 ) ) }

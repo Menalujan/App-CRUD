@@ -19,24 +19,29 @@ class CrearUsuario extends /*React.*/ Component{
         this.state = {
             email: 'aaa@aaa.com',
             password: '1234',
-            nombre: 'Mengano desde React'
+            nombre: 'Mengano desde React',
+            edad: 26,
+            
         }
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         this.onChangeNombre = this.onChangeNombre.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);      
+        this.onChangeEdad = this.onChangeEdad.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);    
+        
     }
     onSubmit(evt) {
         evt.preventDefault();
 
         // Invocamos al servicio cliente HTTP, Ajax, fetch...
-        console.log(`Datos: ${this.state.email} , ${this.state.nombre}`);
+        console.log(`Datos: ${this.state.email} , ${this.state.nombre}, ${this.state.edad}`);
         window.fetch('http://127.0.0.1:4000/api/usuarios/registro', {
             method: 'post',
             body: JSON.stringify({
                 "nombre": this.state.nombre,
                 "email": this.state.email,
-                "password": this.state.password
+                "password": this.state.password,
+                "edad": this.state.edad,
             }), 
             headers:{
               'Content-Type': 'application/json'
@@ -59,6 +64,11 @@ class CrearUsuario extends /*React.*/ Component{
     onChangeNombre(evt) {
         this.setState( {
             nombre: evt.target.value
+        } );
+    }
+    onChangeEdad(evt) {
+        this.setState( {
+            edad: evt.target.value
         } );
     }
     render() {
@@ -87,6 +97,13 @@ class CrearUsuario extends /*React.*/ Component{
                                 placeholder="¿Quién carajo eres?"
                                 onChange = { this.onChangeNombre }
                                value={ this.state.nombre } />
+                    </div>
+                    <div>
+                        <label>Edad: </label>
+                        <input type="number"
+                                placeholder="Edad"
+                                onChange = { this.onChangeEdad }
+                               value={ this.state.edad } />
                     </div>
                     <div>
                         <input type="submit" value="Registrar"/>
