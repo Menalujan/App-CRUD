@@ -68,6 +68,29 @@ rutasAPI.route("/").get(function (reqPeticionHttp, resRespuestaHttp) {
 
 console.log(" 1.2) - El script principal ha terminado ");
 
-rutasAPI.route("/:id").delete(function(req,res) {
-    Usuario.findById(req.params.id).remove().exec();
+rutasAPI.route("/:id").delete(function(reqHttp,resHttp) {
+    let id = reqHttp.params.id;
+    let consultaFindOne = Usuario.findById( {_id : id});
+
+    consultaFindOne.exec((err, resDoc)=>{
+        if(err){
+            resHttp.json({ "mensaje" : "Error al buscar el usuario" + err});
+        } else {
+            if (resDoc == null){
+                resHttp.json({ "mensaje" : "No se ha encontrado el usuario" });
+            } else {
+                    console.log("se ha encontrado, ahora eliminar" + resDoc);
+                    consultaFindOne.deleteOne().exec((err, resDoc2)=>{
+                        let msjResp = "";
+                         if(resDoc2.deletedCount >= 1){
+                            msjResp = "Usuario Eliminado";
+                         } else {
+                            msjResp = "Usuario NO Eliminado";  
+                            } 
+                                console.log(resDoc2);
+                                resHttp.json({"mensaje" : msjResp});
+                    });
+                }
+             }
+    });
 });

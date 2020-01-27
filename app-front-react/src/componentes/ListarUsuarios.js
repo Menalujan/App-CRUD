@@ -4,7 +4,7 @@ class ListarUsuarios extends /*React.*/ Component{
 
     constructor(props){
         super(props);
-        this.deletePost = this.deletePost.bind(this);
+        this.eliminarUsuario = this.eliminarUsuario.bind(this);
     }
 
     // Equivalente al ngOnInit(): El componente ha sido montado
@@ -27,18 +27,20 @@ class ListarUsuarios extends /*React.*/ Component{
     componentWillUnmount () { 
         // Esto se ejecuta cuando se desmonte el componente
     }
-    deletePost(ev) {
-        let el = ev.target
-        let id = el.dataset.idusu
-        console.log(id);
+    eliminarUsuario(ev) {
+        let id = ev.target.dataset.idUsu
 
-        fetch(`http://127.0.0.1:4000/api/usuarios/${id}`, {
+       let promesaHttp =  window.fetch(`http://127.0.0.1:4000/api/usuarios/${id}`, {
             method: 'DELETE',
             mode: 'cors'
         })
          .catch(err => console.error(err))
-         .then((res) => res)
-         window.location.reload();
+         promesaHttp.then((resHttp) => {
+             resHttp.json().then((objMsg) => {
+                alert(objMsg.mensaje);
+                this.componentDidMount();
+             });
+         });
     }
 
     render() {
@@ -74,8 +76,8 @@ class ListarUsuarios extends /*React.*/ Component{
                                             <td>{ usu.nombre }</td>
                                             <td>{ usu.email }</td>
                                             <td>{ usu.edad }</td>
-                                            <td> <button type="submit" data-idusu={usu._id} onClick={this.deletePost}>Eliminar</button></td>
-                                            <td> <input type='button' value='Modificar'/></td>
+                                            <td> <button type="submit" data-id-usu={usu._id} onClick={this.eliminarUsuario}>Eliminar</button></td>
+                                            <td> <input type='submit' value='Modificar'/></td>
                                           </tr> 
                                 ) ) }
                         </tbody>
